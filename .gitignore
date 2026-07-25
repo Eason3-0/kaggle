@@ -29,3 +29,8 @@ Thumbs.db
 # Environment variables
 .env
 .env.local
+data/features/X_train.csv
+data/features/X_valid.csv
+models/xgboost_model.json
+submissions/submission.csv
+data/transactions.csv.zip

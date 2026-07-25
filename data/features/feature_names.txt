@@ -1,0 +1,156 @@
+feature
+store_nbr
+onpromotion
+cluster
+type_code
+dcoilwtico
+has_holiday
+has_event
+is_national
+is_regional
+is_local
+transactions
+dayofweek
+day
+month
+year
+is_weekend
+is_month_start
+is_month_end
+dayofyear
+dow_sin
+dow_cos
+month_sin
+month_cos
+trend_slope
+trend_pred
+"fourier_year_sin(1,365.25)"
+"fourier_year_cos(1,365.25)"
+"fourier_year_sin(2,365.25)"
+"fourier_year_cos(2,365.25)"
+"fourier_year_sin(3,365.25)"
+"fourier_year_cos(3,365.25)"
+"fourier_year_sin(4,365.25)"
+"fourier_year_cos(4,365.25)"
+"fourier_year_sin(5,365.25)"
+"fourier_year_cos(5,365.25)"
+"fourier_year_sin(6,365.25)"
+"fourier_year_cos(6,365.25)"
+"fourier_week_sin(1,7)"
+"fourier_week_cos(1,7)"
+"fourier_week_sin(2,7)"
+"fourier_week_cos(2,7)"
+"fourier_week_sin(3,7)"
+"fourier_week_cos(3,7)"
+sales_lag_1
+sales_lag_7
+sales_lag_14
+sales_lag_28
+onpromotion_lag_1
+onpromotion_lag_7
+sales_rolling_mean_7d
+sales_rolling_std_7d
+sales_rolling_min_7d
+sales_rolling_max_7d
+sales_rolling_mean_14d
+sales_rolling_std_14d
+sales_rolling_min_14d
+sales_rolling_max_14d
+sales_rolling_mean_30d
+sales_rolling_std_30d
+sales_rolling_min_30d
+sales_rolling_max_30d
+onpromotion_rolling_mean_7d
+onpromotion_rolling_mean_14d
+is_store_holiday
+holiday_near_3d
+holiday_near_7d
+dcoilwtico_oil
+oil_lag_1
+oil_lag_7
+oil_lag_14
+oil_lag_30
+oil_rolling_mean_7d
+oil_rolling_mean_14d
+oil_rolling_mean_30d
+oil_change_pct
+family_AUTOMOTIVE
+family_BABY CARE
+family_BEAUTY
+family_BEVERAGES
+family_BOOKS
+family_BREAD/BAKERY
+family_CELEBRATION
+family_CLEANING
+family_DAIRY
+family_DELI
+family_EGGS
+family_FROZEN FOODS
+family_GROCERY I
+family_GROCERY II
+family_HARDWARE
+family_HOME AND KITCHEN I
+family_HOME AND KITCHEN II
+family_HOME APPLIANCES
+family_HOME CARE
+family_LADIESWEAR
+family_LAWN AND GARDEN
+family_LINGERIE
+"family_LIQUOR,WINE,BEER"
+family_MAGAZINES
+family_MEATS
+family_PERSONAL CARE
+family_PET SUPPLIES
+family_PLAYERS AND ELECTRONICS
+family_POULTRY
+family_PREPARED FOODS
+family_PRODUCE
+family_SCHOOL AND OFFICE SUPPLIES
+family_SEAFOOD
+city_Ambato
+city_Babahoyo
+city_Cayambe
+city_Cuenca
+city_Daule
+city_El Carmen
+city_Esmeraldas
+city_Guaranda
+city_Guayaquil
+city_Ibarra
+city_Latacunga
+city_Libertad
+city_Loja
+city_Machala
+city_Manta
+city_Playas
+city_Puyo
+city_Quevedo
+city_Quito
+city_Riobamba
+city_Salinas
+city_Santo Domingo
+state_Azuay
+state_Bolivar
+state_Chimborazo
+state_Cotopaxi
+state_El Oro
+state_Esmeraldas
+state_Guayas
+state_Imbabura
+state_Loja
+state_Los Rios
+state_Manabi
+state_Pastaza
+state_Pichincha
+state_Santa Elena
+state_Santo Domingo de los Tsachilas
+state_Tungurahua
+type_A
+type_B
+type_C
+type_D
+type_E
+weekend_holiday
+promo_weekend
+promo_holiday
+dow_month
