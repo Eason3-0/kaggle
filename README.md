@@ -18,6 +18,20 @@ Predict daily sales for 54 stores × 33 product families across Ecuador.
 
 ---
 
+### [Petals to the Metal — Flower Classification](petals-to-the-metal/)
+
+Classify 104 flower species from TFRecord images.
+
+| Metric | Value |
+|--------|-------|
+| **Score** | val acc 75.24% |
+| **Model** | GoogLeNet (Inception v1) from scratch, 7.1M params |
+| **Key Techniques** | BatchNorm, RandomRotation, AdamW + CosineAnnealing, checkpoint resume |
+
+[→ Project Details](petals-to-the-metal/)
+
+---
+
 ## Structure
 
 Each project lives in its own subdirectory with a standard 4-step pipeline:
