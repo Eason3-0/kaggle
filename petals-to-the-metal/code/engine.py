@@ -158,7 +158,7 @@ def save_curves(train_losses, train_accs, val_accs, filename='training_curves.pn
 # -- Main training function ----------------------------------------
 
 def train(net, train_iter, val_iter, num_epochs, lr, device=None, resume=False,
-          output_dir='.'):
+          output_dir='.', model_name='unknown'):
     """Full training pipeline with terminal progress, checkpointing, and plots.
 
     Args:
@@ -170,6 +170,7 @@ def train(net, train_iter, val_iter, num_epochs, lr, device=None, resume=False,
         device: 'cuda' / 'cpu' (auto-detected if None)
         resume: whether to load checkpoint.pth and continue
         output_dir: where to save models and curves
+        model_name: stored in checkpoint; validated on resume
 
     Returns:
         (train_losses, train_accs, val_accs)
@@ -200,6 +201,13 @@ def train(net, train_iter, val_iter, num_epochs, lr, device=None, resume=False,
     if resume and ckpt_path.exists():
         print(f'  Resuming from {ckpt_path} ...')
         ckpt = torch.load(ckpt_path, map_location=device, weights_only=False)
+        ckpt_model = ckpt.get('model_name', 'unknown')
+        if ckpt_model != model_name:
+            raise RuntimeError(
+                f"Model mismatch: checkpoint uses '{ckpt_model}', "
+                f"but current model is '{model_name}'. "
+                f"Resume only works with the same model type."
+            )
         net.load_state_dict(ckpt['model'])
         optimizer.load_state_dict(ckpt['optimizer'])
         scheduler.load_state_dict(ckpt['scheduler'])
@@ -208,7 +216,8 @@ def train(net, train_iter, val_iter, num_epochs, lr, device=None, resume=False,
         train_losses = ckpt.get('train_losses', [])
         train_accs = ckpt.get('train_accs', [])
         val_accs = ckpt.get('val_accs', [])
-        print(f'  Restored epoch {ckpt["epoch"]}, best val acc: {best_val_acc:.4f}')
+        print(f'  Model: {ckpt_model} | Restored epoch {ckpt["epoch"]}, '
+              f'best val acc: {best_val_acc:.4f}')
 
     timer_epoch = Timer()
     timer_total = Timer()
@@ -230,6 +239,7 @@ def train(net, train_iter, val_iter, num_epochs, lr, device=None, resume=False,
         if val_acc > best_val_acc:
             best_val_acc = val_acc
         torch.save({
+            'model_name': model_name,
             'model': net.state_dict(),
             'optimizer': optimizer.state_dict(),
             'scheduler': scheduler.state_dict(),

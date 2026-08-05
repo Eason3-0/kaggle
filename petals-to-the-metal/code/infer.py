@@ -18,7 +18,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 
 from dataset import PetalsDataset
-from googlenet import GoogLeNet
+from models import GoogLeNet
 
 
 def _list_runs(output_root):

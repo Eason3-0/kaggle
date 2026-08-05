@@ -1,0 +1,19 @@
+### gn_v1_1  |  2026-08-04  |  model=googlenet  lr=0.001  epochs=75
+initial GoogLeNet from scratch, AdamW + dropout 0.5 + random rotation
+
+epoch   1/75 | train loss 3.5395, train acc 0.1609, val acc 0.1835
+epoch   5/75 | train loss 2.6348, train acc 0.2922, val acc 0.2985
+epoch  10/75 | train loss 2.1203, train acc 0.4257, val acc 0.4087
+epoch  15/75 | train loss 1.7541, train acc 0.5145, val acc 0.4758
+epoch  20/75 | train loss 1.4548, train acc 0.5896, val acc 0.5703
+epoch  25/75 | train loss 1.2115, train acc 0.6515, val acc 0.6363
+epoch  30/75 | train loss 0.9881, train acc 0.7114, val acc 0.6684
+epoch  35/75 | train loss 0.7961, train acc 0.7613, val acc 0.6808
+epoch  40/75 | train loss 0.6362, train acc 0.8044, val acc 0.7188
+epoch  45/75 | train loss 0.5079, train acc 0.8427, val acc 0.7241
+epoch  50/75 | train loss 0.4113, train acc 0.8758, val acc 0.7465
+epoch  55/75 | train loss 0.3532, train acc 0.8904, val acc 0.7484
+epoch  60/75 | train loss 0.3466, train acc 0.8913, val acc 0.7503
+epoch  65/75 | train loss 0.3331, train acc 0.8938, val acc 0.7543
+epoch  70/75 | train loss 0.3496, train acc 0.8903, val acc 0.7446
+epoch  75/75 | train loss 0.3825, train acc 0.8799, val acc 0.7395

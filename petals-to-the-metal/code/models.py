@@ -4,7 +4,7 @@ Based on "Going Deeper with Convolutions" (Szegedy et al., 2014).
 
 Usage::
 
-    from googlenet import GoogLeNet
+    from models import GoogLeNet
     model = GoogLeNet(num_classes=104)
 """
 
@@ -124,6 +124,25 @@ class GoogLeNet(nn.Module):
         x = self.avgpool(x)
         x = self.classifier(x)
         return x
+
+
+# -- Model registry ------------------------------------------------
+
+MODEL_REGISTRY = {
+    'googlenet': lambda **kw: GoogLeNet(**kw),
+}
+
+AVAILABLE_MODELS = {
+    'googlenet': 'GoogLeNet (Inception v1) — 7.1M params',
+}
+
+
+def build_model(name, **kwargs):
+    """Factory: return a model instance by name."""
+    if name not in MODEL_REGISTRY:
+        raise ValueError(f"Unknown model '{name}'. "
+                         f"Available: {list(MODEL_REGISTRY.keys())}")
+    return MODEL_REGISTRY[name](**kwargs)
 
 
 # -- Quick sanity check ------------------------------------------
