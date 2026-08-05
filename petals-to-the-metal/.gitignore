@@ -1,0 +1,22 @@
+# Data files (large TFRecords, downloaded from Kaggle)
+data/
+
+# Training outputs (checkpoints, curves)
+output/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,4 +1,5 @@
-"""GoogLeNet (Inception v1) for 104-class flower classification.
+"""
+GoogLeNet (Inception v1) for 104-class flower classification.
 
 Based on "Going Deeper with Convolutions" (Szegedy et al., 2014).
 
@@ -6,12 +7,25 @@ Usage::
 
     from models import GoogLeNet
     model = GoogLeNet(num_classes=104)
+
+ResNet50 for 104-class flower classification.
+    
+Based on "Deep Residual Learning for Image Recognition" (He et al., 2015).
+
+Uses torchvision's pre-trained weights by default.
+    
+    Usage::
+    
+        from models import ResNet50
+        model = ResNet50(num_classes=104)
+    
 """
 
 import torch
 from torch import nn
+import torchvision.models as tv_models
 
-
+# -- GoogLeNet (Scratch) ------------------------------------------------
 class Inception(nn.Module):
     """Inception module — four parallel branches, channel-wise concatenation.
 
@@ -126,14 +140,28 @@ class GoogLeNet(nn.Module):
         return x
 
 
+
+# -- ResNet50 (torchvision) ------------------------------------------------
+class ResNet50(nn.Module):
+    def __init__(self, num_classes=104, pretrained=True, **kwargs):
+        super().__init__()
+        weights = tv_models.ResNet50_Weights.DEFAULT if pretrained else None
+        self.backbone = tv_models.resnet50(weights=weights)
+        self.backbone.fc = nn.Linear(2048, num_classes)
+
+    def forward(self, x):
+        return self.backbone(x)
+
 # -- Model registry ------------------------------------------------
 
 MODEL_REGISTRY = {
     'googlenet': lambda **kw: GoogLeNet(**kw),
+    'resnet50': lambda **kw: ResNet50(**kw)
 }
 
 AVAILABLE_MODELS = {
     'googlenet': 'GoogLeNet (Inception v1) — 7.1M params',
+    'resnet50': 'ResNet50 (torchvision pretrained) — 25.6M params'
 }
 
 

@@ -18,7 +18,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 
 from dataset import PetalsDataset
-from models import GoogLeNet
+from models import build_model
 
 
 def _list_runs(output_root):
@@ -46,7 +46,8 @@ def main():
     for i, name in enumerate(runs):
         ckpt = torch.load(OUTPUT_ROOT / name / 'checkpoint.pth',
                           map_location='cpu', weights_only=False)
-        print(f'  [{i}] {name}  (best val acc={ckpt.get("best_val_acc", 0):.4f})')
+        model = ckpt.get('model_name', '?')
+        print(f'  [{i}] {name}  ({model}, best val acc={ckpt.get("best_val_acc", 0):.4f})')
 
     ans = input('Choose a run: ').strip()
     try:
@@ -65,7 +66,13 @@ def main():
     # -- Model ----------------------------------------------------
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     print(f'\nLoading {weights_path} on {device} ...')
-    model = GoogLeNet(num_classes=104)
+
+    ckpt = torch.load(run_dir / 'checkpoint.pth',
+                      map_location='cpu', weights_only=False)
+    model_name = ckpt.get('model_name', 'googlenet')
+    print(f'  Model: {model_name}')
+
+    model = build_model(model_name, num_classes=104)
     model.load_state_dict(torch.load(weights_path, map_location=device,
                                      weights_only=True))
     model.to(device)

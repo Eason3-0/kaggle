@@ -294,12 +294,23 @@ def train(net, train_iter, val_iter, num_epochs, lr, device=None, resume=False,
                            weights_only=False)
     torch.save(best_ckpt['model'], out / 'best_model.pth')
 
+    # -- Best epoch summary -----------------------------------------
+    best_idx = val_accs.index(max(val_accs))
+    best_log = (f'Best epoch: {best_idx + 1}/{num_epochs}  |  '
+                f'train loss {train_losses[best_idx]:.4f}, '
+                f'train acc {train_accs[best_idx]:.4f}, '
+                f'val acc {val_accs[best_idx]:.4f}')
+
     summary = (f'Training complete.  Total: {timer_total}  |  '
                f'Best val acc: {best_val_acc:.4f}')
     print(f'\n{summary}')
-    print(f'Saved to {out}/')
+    print(best_log)
+    print(f'\nSaved to {out}/')
     print(f'  checkpoint.pth  (for resuming)')
     print(f'  best_model.pth  (val acc={best_val_acc:.4f}, for inference)')
+
+    with open(out / 'notes.txt', 'a', encoding='utf-8') as f:
+        f.write(best_log + '\n')
 
     save_curves(train_losses, train_accs, val_accs,
                 filename=str(out / 'training_curves.png'))

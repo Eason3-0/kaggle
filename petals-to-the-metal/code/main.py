@@ -68,29 +68,33 @@ def _build_pretrained_model(model_name, checkpoint_path, device='cpu'):
     return model
 
 
-def _layer_test(model):
-    """GoogLeNet layer-by-layer shape trace."""
+def _layer_test(model, model_name='unknown'):
+    """Layer-by-layer shape trace (GoogLeNet) or input→output (others)."""
     x = torch.randn(1, 3, 224, 224)
     print(f'  {"input":>16s}  ->  {tuple(x.shape)}')
     with torch.no_grad():
-        for name, layer in [
-            ('stem',           model.stem),
-            ('inception3a',    model.inception3a),
-            ('inception3b',    model.inception3b),
-            ('pool3',          model.pool3),
-            ('inception4a',    model.inception4a),
-            ('inception4b',    model.inception4b),
-            ('inception4c',    model.inception4c),
-            ('inception4d',    model.inception4d),
-            ('inception4e',    model.inception4e),
-            ('pool4',          model.pool4),
-            ('inception5a',    model.inception5a),
-            ('inception5b',    model.inception5b),
-            ('avgpool',        model.avgpool),
-            ('classifier',     model.classifier),
-        ]:
-            x = layer(x)
-            print(f'  {name:>16s}  ->  {tuple(x.shape)}')
+        if model_name == 'googlenet':
+            for name, layer in [
+                ('stem',           model.stem),
+                ('inception3a',    model.inception3a),
+                ('inception3b',    model.inception3b),
+                ('pool3',          model.pool3),
+                ('inception4a',    model.inception4a),
+                ('inception4b',    model.inception4b),
+                ('inception4c',    model.inception4c),
+                ('inception4d',    model.inception4d),
+                ('inception4e',    model.inception4e),
+                ('pool4',          model.pool4),
+                ('inception5a',    model.inception5a),
+                ('inception5b',    model.inception5b),
+                ('avgpool',        model.avgpool),
+                ('classifier',     model.classifier),
+            ]:
+                x = layer(x)
+                print(f'  {name:>16s}  ->  {tuple(x.shape)}')
+        else:
+            y = model(x)
+            print(f'  {"forward":>16s}  ->  {tuple(y.shape)}')
     print(f'  {"params":>16s}  =  '
           f'{sum(p.numel() for p in model.parameters()):,}')
 
@@ -179,16 +183,20 @@ def main():
     # -- Build model & layer test ---------------------------------
     print('\n=== Layer shape test ===')
     model = build_model(model_name, num_classes=104, dropout=0.5)
-    _layer_test(model)
+    _layer_test(model, model_name)
 
     # -- Transforms -----------------------------------------------
     train_transform = transforms.Compose([
         transforms.RandomResizedCrop(224, scale=(0.5, 1.0)),
         transforms.RandomHorizontalFlip(),
         transforms.RandomRotation(degrees=25),
+        transforms.ColorJitter(brightness=0.2,
+                               contrast=0.2,
+                               saturation=0.2),
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406],
                              std=[0.229, 0.224, 0.225]),
+        transforms.RandomErasing(p=0.3, scale=(0.02, 0.15), ratio=(0.3, 3.3)),
     ])
 
     val_transform = transforms.Compose([
@@ -200,7 +208,13 @@ def main():
     ])
 
     # -- Data -----------------------------------------------------
-    print('\n=== Loading data ===')
+    # Auto-pick batch size: ResNet50 needs less VRAM than GoogLeNet
+    _default_bs = {'googlenet': 128, 'resnet50': 32}
+    default_bs = _default_bs.get(model_name, 64)
+    bs_str = input(f'Batch size [default {default_bs}]: ').strip()
+    batch_size = int(bs_str) if bs_str else default_bs
+
+    print(f'\n=== Loading data (batch_size={batch_size}) ===')
     train_ds = PetalsDataset(DATA_DIR, image_size=224, split='train',
                              transform=train_transform, predecode=False)
     val_ds   = PetalsDataset(DATA_DIR, image_size=224, split='val',
@@ -208,9 +222,9 @@ def main():
     print(f'  train: {len(train_ds)} samples')
     print(f'  val:   {len(val_ds)} samples')
 
-    train_iter = DataLoader(train_ds, batch_size=128, shuffle=True,
+    train_iter = DataLoader(train_ds, batch_size=batch_size, shuffle=True,
                             num_workers=0, pin_memory=True)
-    val_iter   = DataLoader(val_ds,   batch_size=128, shuffle=False,
+    val_iter   = DataLoader(val_ds,   batch_size=batch_size, shuffle=False,
                             num_workers=0, pin_memory=True)
 
     # -- Train ----------------------------------------------------
